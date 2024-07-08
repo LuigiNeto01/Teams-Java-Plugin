@@ -1,0 +1,15 @@
+com\luigi\projetotimes\Events\PlayerDamage.class
+com\luigi\projetotimes\Manager\TeamManager.class
+com\luigi\projetotimes\Commands\Commands$TimeNameComparator.class
+com\luigi\projetotimes\Events\PlayerDropItemListener.class
+com\luigi\projetotimes\Times\Time.class
+com\luigi\projetotimes\Events\InventoryClick.class
+com\luigi\projetotimes\Events\PlayerJoinEventListener.class
+com\luigi\projetotimes\ScoreBoard\ScoreboardManager.class
+com\luigi\projetotimes\Events\PlayerQuit.class
+com\luigi\projetotimes\Events\PlayerDeathListener.class
+com\luigi\projetotimes\ProjetoTime.class
+com\luigi\projetotimes\ProjetoTime$1.class
+com\luigi\projetotimes\Commands\Commands.class
+com\luigi\projetotimes\Commands\Commands$1.class
+com\luigi\projetotimes\Events\PlayerKillEvent.class

@@ -1,0 +1,7 @@
+name: ProjetoTimes
+version: '1.0'
+main: com.luigi.projetotimes.ProjetoTime
+commands:
+  times:
+    description: Comando para gerenciar times
+    usage: /<command>
