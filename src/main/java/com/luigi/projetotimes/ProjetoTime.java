@@ -1,6 +1,7 @@
 package com.luigi.projetotimes;
 
 import com.luigi.projetotimes.Commands.Commands;
+import com.luigi.projetotimes.Commands.WhiterEffect;
 import com.luigi.projetotimes.Events.*;
 import com.luigi.projetotimes.Manager.TeamManager;
 import com.luigi.projetotimes.ScoreBoard.ScoreboardManager;
@@ -24,10 +25,12 @@ public final class ProjetoTime extends JavaPlugin implements Listener {
     private Map<String, Integer> playerKills = new HashMap<>();
     private ScoreboardManager scoreboardManager;
     private TeamManager teamManager;
+    private InventoryClick inventoryClick; // Adiciona essa linha
 
     @Override
     public void onEnable() {
         this.getCommand("times").setExecutor(new Commands(this));
+        this.getCommand("wither").setExecutor(new WhiterEffect(this));
         getServer().getPluginManager().registerEvents(new InventoryClick(this), this);
         getServer().getPluginManager().registerEvents(new PlayerDamage(this), this);
         getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
@@ -38,6 +41,7 @@ public final class ProjetoTime extends JavaPlugin implements Listener {
 
         scoreboardManager = new ScoreboardManager(this);
         teamManager = new TeamManager(this);
+        inventoryClick = new InventoryClick(this); // Adiciona essa linha
 
         // Atualiza o scoreboard para todos os jogadores quando o plugin é ativado
         scoreboardManager.updateAllScoreboards();
@@ -70,8 +74,7 @@ public final class ProjetoTime extends JavaPlugin implements Listener {
     public void updateTeamSelectionMenu() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getOpenInventory().getTitle().equals("Escolha um Time")) {
-                InventoryClick inventoryClick = new InventoryClick(this);
-                inventoryClick.openTeamSelectionMenu(player);
+                inventoryClick.openTeamSelectionMenu(player, 1); // Corrige essa linha
             }
         }
     }
@@ -115,5 +118,9 @@ public final class ProjetoTime extends JavaPlugin implements Listener {
 
     public TeamManager getTeamManager() {
         return teamManager;
+    }
+
+    public InventoryClick getInventoryClick() { // Adiciona este método getter
+        return inventoryClick;
     }
 }

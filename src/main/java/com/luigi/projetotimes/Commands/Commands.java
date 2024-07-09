@@ -4,18 +4,12 @@ import com.luigi.projetotimes.ProjetoTime;
 import com.luigi.projetotimes.Times.Time;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
-import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -23,7 +17,7 @@ import java.util.List;
 
 public class Commands implements CommandExecutor {
 
-    private ProjetoTime plugin;
+    private final ProjetoTime plugin;
 
     public Commands(ProjetoTime plugin) {
         this.plugin = plugin;
@@ -98,37 +92,7 @@ public class Commands implements CommandExecutor {
                 return true;
             }
 
-            List<Time> sortedTimes = new ArrayList<>(plugin.getTimes().values());
-            sortedTimes.sort(Comparator.comparing(Time::getNome, new TimeNameComparator()));
-
-            int totalItems = sortedTimes.size();
-            int invSize = ((totalItems - 1) / 9 + 1) * 9;
-            Inventory inv = Bukkit.createInventory(null, invSize, "Escolha um Time");
-
-            for (int i = 0; i < sortedTimes.size(); i++) {
-                Time time = sortedTimes.get(i);
-                ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE);
-                LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
-                Color color = getColor(i);
-                meta.setColor(color);
-                meta.setDisplayName(ChatColor.GREEN + time.getNome());
-
-                // Adiciona a descrição com os jogadores do time
-                List<String> lore = new ArrayList<>();
-                for (String jogador : time.getJogadores()) {
-                    lore.add(ChatColor.GRAY + " - " + jogador);
-                }
-                int vagasVazias = time.getCapacidade() - time.getJogadores().size();
-                for (int j = 0; j < vagasVazias; j++) {
-                    lore.add(ChatColor.GRAY + " - vazio");
-                }
-                meta.setLore(lore);
-
-                item.setItemMeta(meta);
-                inv.setItem(i, item);
-            }
-
-            player.openInventory(inv);
+            plugin.getInventoryClick().openTeamSelectionMenu(player, 1);
 
         } else if (args[0].equalsIgnoreCase("sair")) {
             for (Time time : plugin.getTimes().values()) {
@@ -155,52 +119,16 @@ public class Commands implements CommandExecutor {
     }
 
     private void resetNameTag(Player player) {
-        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        org.bukkit.scoreboard.ScoreboardManager manager = Bukkit.getScoreboardManager();
         if (manager == null) {
             return;
         }
-        Scoreboard scoreboard = manager.getMainScoreboard();
-        Team team = scoreboard.getTeam("team_" + player.getName());
+        org.bukkit.scoreboard.Scoreboard scoreboard = manager.getMainScoreboard();
+        org.bukkit.scoreboard.Team team = scoreboard.getTeam("team_" + player.getName());
         if (team != null) {
             team.removeEntry(player.getName());
             team.unregister();
         }
-    }
-
-    private void updateNameTag(Player player, String timeName, ChatColor color) {
-        ScoreboardManager manager = Bukkit.getScoreboardManager();
-        if (manager == null) {
-            return;
-        }
-        Scoreboard scoreboard = manager.getMainScoreboard();
-        Team team = scoreboard.getTeam("team_" + player.getName());
-        if (team == null) {
-            team = scoreboard.registerNewTeam("team_" + player.getName());
-        }
-        team.setPrefix(color + timeName + " - ");
-        team.addEntry(player.getName());
-    }
-
-    private Color getColor(int index) {
-        Color[] colors = {
-                Color.WHITE, Color.SILVER, Color.GRAY, Color.BLACK,
-                Color.RED, Color.MAROON, Color.YELLOW, Color.OLIVE,
-                Color.LIME, Color.GREEN, Color.AQUA, Color.TEAL,
-                Color.BLUE, Color.NAVY, Color.FUCHSIA, Color.PURPLE,
-                Color.ORANGE
-        };
-        return colors[index % colors.length];
-    }
-
-    private ChatColor getChatColor(int index) {
-        ChatColor[] chatColors = {
-                ChatColor.WHITE, ChatColor.GRAY, ChatColor.DARK_GRAY, ChatColor.BLACK,
-                ChatColor.RED, ChatColor.DARK_RED, ChatColor.YELLOW, ChatColor.GOLD,
-                ChatColor.GREEN, ChatColor.DARK_GREEN, ChatColor.AQUA, ChatColor.DARK_AQUA,
-                ChatColor.BLUE, ChatColor.DARK_BLUE, ChatColor.LIGHT_PURPLE, ChatColor.DARK_PURPLE,
-                ChatColor.GOLD
-        };
-        return chatColors[index % chatColors.length];
     }
 
     private void resetAllPlayers() {

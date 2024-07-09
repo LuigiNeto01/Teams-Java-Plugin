@@ -19,7 +19,6 @@ public class ScoreboardManager {
     }
 
     public void updateScoreboard(Player player) {
-        plugin.getLogger().info("Updating scoreboard for player: " + player.getName());
         org.bukkit.scoreboard.ScoreboardManager manager = Bukkit.getScoreboardManager();
         if (manager == null) {
             plugin.getLogger().severe("ScoreboardManager is null");
@@ -28,17 +27,17 @@ public class ScoreboardManager {
         Scoreboard scoreboard = manager.getNewScoreboard();
         Objective objective = scoreboard.registerNewObjective("sidebar", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName(ChatColor.GREEN + "Info");
+        objective.setDisplayName(ChatColor.GOLD + "SpartaMC");
 
         int score = 15;
 
         // Time do jogador
         String timeName = getPlayerTime(player.getName());
-        objective.getScore(ChatColor.YELLOW + "Time: " + (timeName != null ? timeName : "Sem time")).setScore(score--);
+        objective.getScore(ChatColor.BLUE + "Time: " + (timeName != null ? timeName : "Sem time")).setScore(score--);
 
         // Jogadores do time
         objective.getScore(" ").setScore(score--); // Espaço vazio
-        objective.getScore(ChatColor.YELLOW + "Jogadores do time:").setScore(score--);
+        objective.getScore(ChatColor.BLUE + "Jogadores do time:").setScore(score--);
         Time playerTime = plugin.getTimes().get(timeName);
         if (playerTime != null) {
             List<String> jogadores = playerTime.getJogadores();
@@ -53,11 +52,14 @@ public class ScoreboardManager {
 
         // Ranking dos times
         objective.getScore("  ").setScore(score--); // Espaço vazio
-        objective.getScore(ChatColor.YELLOW + "Ranking dos times:").setScore(score--);
+        objective.getScore(ChatColor.BLUE + "Ranking dos times:").setScore(score--);
         List<Map.Entry<String, Integer>> sortedTimes = getSortedTimes();
         for (int i = 0; i < 3 && i < sortedTimes.size(); i++) {
             Map.Entry<String, Integer> entry = sortedTimes.get(i);
-            objective.getScore(ChatColor.GRAY + " - " + entry.getKey() + ": " + entry.getValue()).setScore(score--);
+            if(i==0){objective.getScore(ChatColor.GRAY + " - " + entry.getKey() + ": " + ChatColor.YELLOW +entry.getValue()).setScore(score--);}
+            if(i==1){objective.getScore(ChatColor.GRAY + " - " + entry.getKey() + ": " + ChatColor.GRAY +entry.getValue()).setScore(score--);}
+            if(i==2){objective.getScore(ChatColor.GRAY + " - " + entry.getKey() + ": " + ChatColor.GOLD +entry.getValue()).setScore(score--);}
+
         }
 
         player.setScoreboard(scoreboard);

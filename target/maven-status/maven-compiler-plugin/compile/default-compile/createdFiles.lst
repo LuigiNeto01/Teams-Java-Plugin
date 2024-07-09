@@ -9,6 +9,7 @@ com\luigi\projetotimes\ScoreBoard\ScoreboardManager.class
 com\luigi\projetotimes\Events\PlayerQuit.class
 com\luigi\projetotimes\Events\PlayerDeathListener.class
 com\luigi\projetotimes\ProjetoTime.class
+com\luigi\projetotimes\Commands\WhiterEffect.class
 com\luigi\projetotimes\ProjetoTime$1.class
 com\luigi\projetotimes\Commands\Commands.class
 com\luigi\projetotimes\Commands\Commands$1.class
