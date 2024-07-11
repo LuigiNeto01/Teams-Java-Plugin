@@ -1,0 +1,10 @@
+name: ProjetoTimes
+version: '1.0'
+main: com.luigi.projetotimes.ProjetoTime
+commands:
+  times:
+    description: Comando para gerenciar times
+    usage: /<command>
+  wither:
+    description: Aplica efeito de whiter em todos os players no modo survival
+    usage: /wither <nível> <tempo>
